@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prodavaonica</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="form-container">
+    <form>
+        <label for="username">Korisničko ime:</label>
+        <br> 
+        <input type="text" id="username" name="username" />
+        <br>
+        <label for="password">Lozinka:</label>
+        <br> 
+        <input type="password" id="password" name="password" />
+        <br>
+        <button id="login_gumb">Login</button> 
+        <p><br><a href="registracija.html">Registriraj se!</a></p>
+        <div id="greska"></div>
+    </form>
+</div>
+    <script type="text/javascript">
+        var xhr = new XMLHttpRequest();
+        var myTimer;
+        document.getElementById("login_gumb").addEventListener("click", function(event){
+            event.preventDefault();
+            var user = document.getElementById("username").value;
+            var pass = document.getElementById("password").value;
+            salji(user,pass);
+        })
+       
+        function salji(user,pass)
+        {
+            
+            xhr.open("POST", "login.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = provijeriResponse;
+            xhr.send("op=login&username="+user+"&password="+pass);
+        }
+        function provijeriResponse()
+        {
+            if(xhr.readyState == 4 && xhr.status == 200)
+            {
+                if(xhr.responseText=="Uspijeh")
+                {
+                    window.location.href = "index.php";
+                }else {
+                    document.getElementById("greska").innerHTML = "Krivo korisničko ime ili lozinka";
+                }
+            }
+        }
+    </script>
+</body>
+</html>

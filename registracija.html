@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prodavaonica</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="form-container">
+    <form>
+        <label for="username">Korisničko ime:</label>
+        <br> 
+        <input type="text" id="username" name="username" />
+        <br>
+        <label for="password">Lozinka:</label>
+        <br> 
+        <input type="password" id="password" name="password" />
+        <br>
+        <label for="password2">Ponovite lozinku:</label>
+        <br>
+        <input type="password" id="password2" name="password2" />
+        <br>
+        <button id="registracija_gumb">Register</button> 
+        <p><br><a href="login.html">Već imaš račun?</a></p>
+        <div id="greska"></div>
+    </form>
+</div>
+    <script type="text/javascript">
+        var xhr = new XMLHttpRequest();
+        var myTimer;
+        document.getElementById("registracija_gumb").addEventListener("click", function(event){
+            event.preventDefault();
+            var user = document.getElementById("username").value;
+            var pass = document.getElementById("password").value;
+            var pass2 = document.getElementById("password2").value;
+            
+                salji(user,pass,pass2);
+        });
+        function Prelazak()
+        {
+            clearInterval(myTimer);
+            window.location.href = "login.html";
+        }
+        function salji(user,pass,pass2)
+        {
+            
+            xhr.open("POST", "registracija.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = provijeriResponse;
+            xhr.send("op=sendInfo&username="+user+"&password="+pass+"&password2="+pass2);
+        }
+        function provijeriResponse()
+        {
+            if(xhr.readyState == 4 && xhr.status == 200)
+            {
+                console.log("tu sam");
+                var recivedInfo = xhr.responseText;
+                if(recivedInfo == "Korisnik kreiran")
+                {
+                    document.getElementById("greska").innerHTML = recivedInfo;
+                    myTimer = setInterval(Prelazak, 2000);
+                }
+                else
+                {
+                    document.getElementById("greska").innerHTML = recivedInfo;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
